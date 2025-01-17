@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Landing Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins&family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        a{
+            background-color: #20514f;
+            font-family: poppins;
+        }
+        p{
+            font-family: poppins;
+        }
+    </style>
+</head>
+
+<body class="bg-cover bg-center font-mono" style="background-image: url('{{ url_for('static', filename='images/wall2.jpg') }}')"></body>
+    <div class="min-h-screen flex flex-col justify-center items-center bg-opacity-75">
+        <div class="border-left-2 p-8 rounded-lg shadow-2xl w-1/2 max-w-md text-left">
+            <h1 class="text-4xl font-semibold mb-4">LinkClick</h1>
+            <p class="text-black text-lg mb-8">LinkClick is your gateway to effortless photo-to-video conversion. Seamlessly merge your favorite images into captivating video montages, complete with dynamic transitions and personalized soundtracks. Whether it's crafting stunning slideshows for special occasions or sharing memories on social media, LinkClick empowers you to transform snapshots into unforgettable stories with just a click.</p>
+            <div class="space-y-4">
+                <a href="/login" class="text-center text-white py-3 px-6 rounded-lg hover:bg-opacity-75 hover:bg-black inline-block w-full">Login</a>
+                <a href="/register" class="text-white text-center py-3 px-6 rounded-lg hover:bg-opacity-75 hover:bg-black inline-block w-full">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

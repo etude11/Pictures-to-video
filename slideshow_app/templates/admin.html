@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins&family=Roboto&display=swap" rel="stylesheet">
+
+    <title>Admin Page</title>
+    <style>
+        body{
+            background-image: url(../images/wall2.jpg);
+        }
+
+        .content {
+            margin-top: 4rem;
+        }
+
+        main h1{
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .user-details {
+            background-color: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.25rem;
+        }
+
+        .user-details h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .user-details p {
+            font-size: 1rem;
+        }
+        
+    </style>
+</head>
+<body class="bg-gray-200">
+    <video autoplay muted loop id="myVideo">
+        <source src="../images/wall.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+      </video>
+    <div class="content">
+        <main class="flex items-center justify-center flex-col min-h-screen">
+            <h1 class="text-4xl text-left md:text-5xl mb-8">Admin Page</h1>
+            <div class="user-details">
+                <h2>User 1</h2>
+                <p>Email: user1@example.com</p>
+                <p>Role: Admin</p>
+            </div>
+            <div class="user-details">
+                <h2>User 2</h2>
+                <p>Email: user2@example.com</p>
+                <p>Role: User</p>
+            </div>
+            <div class="user-details">
+                <h2>User 3</h2>
+                <p>Email: user3@example.com</p>
+                <p>Role: User</p>
+            </div>
+            <div class="user-details">
+                <h2>User 4</h2>
+                <p>Email: user4@example.com</p>
+                <p>Role: User</p>
+            </div>
+            
+            <!-- Add more user details as needed -->
+        </main>
+    </div>
+</body>
+</html>

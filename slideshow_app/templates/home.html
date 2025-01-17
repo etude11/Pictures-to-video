@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins&family=Roboto&display=swap" rel="stylesheet">
+
+    <title>Photo-slideshow App - Home</title>
+    <style>
+        body{
+            background-image: url({{url_for('static', filename='images/wall2.jpg')}});
+            background-size: cover;
+        }
+
+        .user-heading {
+            color: white;
+            font-weight: bold;
+            margin-left: 0.5rem; /* Add margin to separate it from other elements */
+            padding: 0.5rem; /* Add padding for spacing */
+            display: block; /* Ensure it respects margin and padding */
+            margin-top: 1rem; /* Add margin to push it below the navbar */
+        }
+
+        /* Adjust navbar styles to make sure it doesn't overlap with the user-heading */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: transparent;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+            margin-bottom: 2rem; /* Add margin at the bottom to prevent overlap */
+        }
+
+        /* Adjust navbar-links styles to align with other elements */
+        .navbar-links {
+            display: flex;
+            gap: 1rem;
+            font-size: 1.5rem;
+            margin-right: 1rem; /* Add margin to separate it from the user-heading */
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+
+        .navbar-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .navbar-link:hover {
+            opacity:0.7;
+        }
+
+        .logout-button {
+            background-color: white;
+            color: black;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background-color: gray;
+            color: white;
+        }
+
+        .content {
+            margin-top: 4rem;
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin: 0.5rem;
+            border-radius: 5%;
+        }
+
+        @media (max-width: 768px) {
+            .preview-image {
+                width: 70px;
+                height: 70px;
+                border-radius: 5%;
+            }
+        }
+
+        #upload {
+            height: 200px; /* Increase the height as desired */
+            font-size: 3em;
+        }
+
+        #upload p{
+            font-family: 'Poppins', sans-serif;
+        }
+
+        main h1{
+            font-family: 'Poppins', sans-serif;
+        }
+
+
+    .image-container {
+        position: relative;
+    }
+
+    .image-selected {
+        /* border: 2px solid rgb(48, 184, 229); */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    
+}
+
+    </style>
+</head>
+<body class="bg-gray-200">
+
+        <nav class="navbar">    
+            <div class="navbar-brand">LINK CLICK</div>
+            <div class="navbar-links">
+                <!-- Display the username fetched from cookies -->
+                <h2 class="user-heading">HI, {{ user }}</h2>
+                <a href="/dashboard" class="navbar-link">Home</a>
+                <a href="/logout" class="navbar-link">Logout</a>
+            </div>
+        </nav>
+    <div class="content overflow">
+        <main class="flex items-center justify-center flex-col min-h-screen">
+            <h1 class="text-4xl text-left md:text-5xl mb-8">Upload Images</h1>
+            <div class="container mx-auto px-4 flex flex-col items-center justify-center opacity-100 border-4 border-gray-300 border-dotted md:w-1/3 w-1/2 p-4 rounded-lg shadow-lg" id="upload">
+                <img src="{{ url_for('static', filename='/images/img/upload.svg') }}" alt="">
+                <div>
+                    <p class="mb-4 text-2xl text-center ">Drag and Drop<br>or<label for="imageUpload" class=" cursor-pointer inline p-2 rounded tex cursor-pointer mb-4 text-2xl font-bold opacity-100">browse</label></p>
+                    
+                    <!-- Custom-styled file input using Tailwind CSS -->
+                    <input type="file" id="imageUpload" accept="image/*" multiple class="hidden">
+                </div>
+            </div>
+            
+            <!-- Display uploaded images outside the #upload div -->
+<!-- Display uploaded images outside the #upload div -->
+<div id="imagePreview" class="flex flex-row flex-wrap mt-4 w-1/2">
+    <!-- Preview images with checkboxes will be added here -->
+</div>
+
+
+            <!-- Button to create video -->
+            <button id='createVideo' style="background-color:#20514f;" class="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Video</button>
+        </main>
+    </div>
+
+
+    <script>
+    document.getElementById('imageUpload').addEventListener('change', handleImageSelect);
+    
+    const uploadContainer = document.getElementById('upload');
+    uploadContainer.addEventListener('dragover', handleDragOver);
+    uploadContainer.addEventListener('drop', handleDrop);
+
+    function handleDragOver(event) {
+        event.preventDefault();
+        uploadContainer.classList.add('border-blue-500');
+    }
+
+    function handleDrop(event) {
+        event.preventDefault();
+        uploadContainer.classList.remove('border-blue-500');
+
+        const files = event.dataTransfer.files;
+        const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+
+        handleImageSelect({ target: { files: imageFiles } });
+    }
+    document.getElementById('imageUpload').addEventListener('change', handleImageSelect);
+
+function handleImageSelect(event) {
+    const previewContainer = document.getElementById('imagePreview');
+
+    const files = event.target.files;
+
+    for (const file of files) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const imgElement = document.createElement('img');
+            imgElement.src = e.target.result;
+            imgElement.classList.add('preview-image');
+
+            // Add an event listener to the image
+            imgElement.addEventListener('click', function() {
+                this.classList.toggle('image-selected');
+            });
+
+            // Create a div to hold the image
+            const imageDiv = document.createElement('div');
+            imageDiv.classList.add('image-container');
+            imageDiv.appendChild(imgElement);
+
+            previewContainer.appendChild(imageDiv);
+        };
+
+        reader.readAsDataURL(file);
+    }   
+}
+// Add this function to your JavaScript code
+function sendSelectedImages() {
+    const selectedImages = document.querySelectorAll('.image-selected');
+    const formData = new FormData();
+
+    selectedImages.forEach((img, index) => {
+        // Convert data URL to Blob
+        const byteString = atob(img.src.split(',')[1]);
+        const mimeString = img.src.split(',')[0].split(':')[1].split(';')[0]
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([ab], {type: mimeString});
+
+        formData.append(`image${index}`, blob);
+    });
+
+    // Fetch API options with credentials and headers
+    const fetchOptions = {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',  // Include credentials (cookies) in the request
+        headers: {
+            // Add any additional headers if needed
+        },
+    };
+
+    fetch('/upload_images', fetchOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            window.location.href = '/video';
+
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+document.getElementById('createVideo').addEventListener('click', sendSelectedImages);
+
+
+
+</script>
+
+</body>
+</html>

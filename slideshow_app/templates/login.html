@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        button{
+            background-color: #20514f;
+            font-family: poppins;
+        }
+
+    </style>
+</head>
+
+<body class="bg-cover bg-center font-poppins" style="background-image: url('{{ url_for('static', filename='images/wall2.jpg') }}')">
+    <div class="min-h-screen flex justify-center items-center bg-opacity-75">
+        <div class="w-1/5  p-8 rounded-lg shadow-lg s">
+            <h1 class="text-3xl font-semibold mb-4">Login</h1>
+            <form action="/login" method="post">
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium text">Username</label>
+                    <input type="text" id="username" name="username" class="mt-1 p-2 block w-full rounded-md border-bottom-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text">Password</label>
+                    <input type="password" id="password" name="password" class="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+                <button type="submit" class="w-full text-white py-2 px-4 rounded-md hover:bg-opacity-75 hover:bg-black">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

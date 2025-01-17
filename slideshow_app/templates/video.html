@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Preview and Customization</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins&family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('{{ url_for('static', filename='images/wall2.jpg') }}'); /* Add your background image here */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }   
+        .container {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .image-container {
+            width: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .image-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+        .image-container h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        #videoPreview {
+            /* background-color: rgba(243, 244, 246, 0.8); bg-gray-200 with reduced opacity */
+            /* border: 4px dotted rgba(209, 213, 219, 0.8); border-gray-300 with reduced opacity */
+            border-radius: 2rem;
+            /* padding: 1rem; */
+            width: 60%;
+            margin: auto;
+        }
+        .svg-icon {
+            fill: black; /* Change the fill color to black */
+            width: 50px; /* Make the SVG icon smaller */
+            height: auto;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .customization-controls .control-btn {
+            /* Change the background color to blue */
+            color: white; /* Change the text color to white */
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            margin: 0.5rem;
+        }
+        .control-btn{
+            background-color:#20514f;
+        }
+        /* Media query for mobile screens */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                margin-top: 4rem; /* Add margin to the top of the container */
+            }
+            .image-container {
+                align-items: center;
+                width: 90%;
+            }
+            #videoPreview {
+                width: 90%;
+            }
+        }
+        .navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: transparent;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .navbar-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .navbar-link:hover {
+            opacity:0.7;
+        }
+
+    </style>
+</head>
+<script> 
+function loadfix(){
+let src = document.querySelector('#videoPreview > video > source');
+src.src = '/static/video.mp4?v='+Date.now();
+src.parentElement.load();
+}
+</script>
+<body class="bg-gray-200" onload="loadfix()">
+    <main class="flex flex-col items-center justify-center min-h-screen">
+        <nav class="navbar">    
+            <div class="navbar-brand">LINK CLICK</div>
+            <div class="navbar-links">
+                <a href="/dashboard" class="navbar-link">Home</a>
+                <a href="/logout" class="navbar-link">Logout</a>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="image-container">
+                <h2 class="text-white">Image Preview</h2>
+                {% for image in images %}
+                <div class="image-duration-selector">
+                    <img src="data:image/jpeg;base64,{{ image }}">
+                    <input type="number" class="image-duration" onchange="updateImageDuration(this.value)" placeholder="Enter duration in seconds" min=1 value=1>
+                </div>
+                {% endfor %}
+
+            </div>
+            <div id="videoPreview" class="shadow-lg">
+                <video width="980" height="240" controls>
+                    <source src="" type="video/mp4"> 
+                    Your browser does not support the video tag.
+                  </video>
+            </div>
+        </div>
+        <div class="video-controls my-4 flex justify-between">
+            <!-- Rewind 10 seconds icon -->
+            <svg onclick="rewindVideo()" class="svg-icon rewind-button" viewBox="0 0 24 24">
+                <image href="{{ url_for('static', filename='images/rewind-10-seconds-svgrepo-com.svg') }}" width="24" height="24"></image>
+            </svg>
+            <!-- Forward 10 seconds icon -->
+            <svg onclick="forwardVideo()" class="svg-icon forward-button" viewBox="0 0 24 24">
+                <image href="{{ url_for('static', filename='images/forge-icon.svg') }}" width="24" height="24"></image>
+            </svg>
+        </div>
+        <!-- Customization Controls (Non-functional placeholders) -->
+        <div class="customization-controls my-4 flex flex-wrap justify-center">
+            <label class="control-btn cursor-pointer" onclick="addBackgroundMusic()">Add Background Music </label>
+            <label class="control-btn cursor-pointer" id="dur">Set Image Duration </label>
+            <!-- <label class="control-btn cursor-pointer">Transition Effects </label> -->
+            <!-- <label class="control-btn cursor-pointer">Change resolution</label> -->
+            <select class="control-btn cursor-pointer" id="music">
+                <option selected disabled>Select Audio</option>
+                {% for audio_file in audio_files %}
+                    <option value="{{ audio_file }}">{{ audio_file }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="customization-controls my-4 flex flex-wrap justify-center">
+            <label class="control-btn cursor-pointer">Download Video </label>
+
+        </div>
+
+    </main>
+    <script>
+        const videoPlayer = document.getElementById('videoPlayer');
+        const playPauseIcon = document.querySelector('.play-pause-icon');
+        document.getElementById('dur').addEventListener('click', function() {
+    var durations = Array.from(document.getElementsByClassName('image-duration')).map(function(select) {
+        return select.value;
+    });
+
+    fetch('/update_duration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({durations: durations})
+    }).then(function(response) {
+        if (response.ok) {
+            alert('Video updated successfully');
+loadfix();
+        } else {
+            alert('Failed to update video');
+        }
+    });
+});
+        function playPauseVideo() {
+            if (videoPlayer.paused) {
+                videoPlayer.play();
+                playPauseIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; // Pause icon
+            } else {
+                videoPlayer.pause();
+                playPauseIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Play icon
+            }
+        }
+
+        function rewindVideo() {
+            videoPlayer.currentTime -= 10; 
+            //            rewind by 10 seconds
+        }
+
+        function forwardVideo() {
+            videoPlayer.currentTime += 10; // Forward by 10 seconds
+        }
+
+        function changeResolution() {
+            // Add your code to change the resolution of the video here
+            // This is the frontend part, so no functionality is required
+            // You can display a message or update the UI to indicate the resolution change
+            console.log("Resolution changed");
+        }
+
+        // Initialize play/pause icon
+        playPauseIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Play icon
+        function addBackgroundMusic() {
+            var audioFile = document.getElementById('music').value;
+            console.log(audioFile);
+            fetch('/add_background_music', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'audio_file': audioFile})
+            })
+            .then(function(response) {
+                if (response.ok) {
+                    alert('Video updated successfully');
+		loadfix();
+                } else {
+                    alert('Failed to update video');
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
